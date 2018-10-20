@@ -9,16 +9,18 @@ Author: Rodrigo Toshiaki Horie - 26620
 #include <sys/socket.h>
 #include <netdb.h>
 #include <stdio.h>
-#include<string.h>
+#include <string.h>
+#include <unistd.h>
 
 /**
  * TCP Uses 2 types of sockets, the connection socket and the listen socket.
  * The Goal is to separate the connection phase from the data exchange phase.
  * */
 
-int main(int argc, char *argv[])
+int main()
 {
-        char str[40000];
+        printf("Iniciando servidor...\n");
+        char str[100];
         int listen_fd, comm_fd;
 
         // especifica IP e Porta
@@ -29,13 +31,14 @@ int main(int argc, char *argv[])
 
         // zera valores de memória
         bzero( &servaddr, sizeof(servaddr));
-
         // define protocolo IP para conexão
         servaddr.sin_family = AF_INET;
         // permite qualquer conexão IP
         servaddr.sin_addr.s_addr = htons(INADDR_ANY);
         // define porta de escuta
         servaddr.sin_port = htons(9000);
+
+        printf("Porta: 9000\nEsperando conexão...\n");
 
         // define os atributos para a escuta
         bind(listen_fd, (struct sockaddr *) &servaddr, sizeof(servaddr));
@@ -46,17 +49,14 @@ int main(int argc, char *argv[])
         // espera e aceita conexão
         comm_fd = accept(listen_fd, (struct sockaddr*) NULL, NULL);
 
+        printf("Conexão estabelecida! Aguardando mensagem...\n");
+
         while(1)
         {
-
-                bzero( str, 40000);
-
-                read(comm_fd,str,40000);
-
+                bzero( str, 100);
+                read(comm_fd,str,100);
                 printf("Reenviando mensagem... - %s",str);
-
                 write(comm_fd, str, strlen(str)+1);
-
-                }
         }
+        return 0;
 }
