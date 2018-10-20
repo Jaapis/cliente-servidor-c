@@ -12,10 +12,6 @@ Author: Rodrigo Toshiaki Horie - 26620
 #include <string.h>
 #include <unistd.h>
 
-/**
- * TCP Uses 2 types of sockets, the connection socket and the listen socket.
- * The Goal is to separate the connection phase from the data exchange phase.
- * */
 
 int main()
 {
@@ -47,7 +43,6 @@ int main()
         listen(listen_fd, 5);
 
         // espera e aceita conexão
-        comm_fd = accept(listen_fd, (struct sockaddr*) NULL, NULL);
 
         printf("Conexão estabelecida! Aguardando mensagem...\n");
 
@@ -58,49 +53,7 @@ int main()
                 printf("Reenviando mensagem... - %s",str);
                 write(comm_fd, str, strlen(str)+1);
 
-                if (comm_fd > 0)
-                {
-                        handleClient(comm_fd)
-                }
         }
+
         return 0;
-}
-
-void handleClient(int sd)
-{
-   fd_set read_sd;
-   FD_ZERO(&read_sd);
-   FD_SET(sd, &read_sd);
-
-   while (true) {
-      fd_set rsd = read_sd;
-
-      int sel = select(sd + 1, &rsd, 0, 0, 0);
-
-      if (sel > 0) {
-         // client has performed some activity (sent data or disconnected?)
-
-         char buf[1024] = {0};
-
-         int bytes = recv(sd, buf, sizeof(buf), 0);
-
-         if (bytes > 0) {
-            // got data from the client.
-         }
-         else if (bytes == 0) {
-            // client disconnected.
-            break;
-         }
-         else {
-            // error receiving data from client. You may want to break from
-            // while-loop here as well.
-         }
-      }
-      else if (sel < 0) {
-         // grave error occurred.
-         break;
-      }
-   }
-
-   close(sd);
 }
