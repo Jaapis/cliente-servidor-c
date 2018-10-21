@@ -69,7 +69,7 @@ int main(){
                 printf("Falha no bind... \n");
                 return 1;
         }
-
+//testeeeeeeeeeeeeeeeeeeee
         // inicia a escuta e limita a quantidade de conexões em espera. Se conxões maior que limite, conexão falha
         if(listen(listen_fd, 10) < 0){
                 printf("Não foi possível criar socket para escuta...\n");
