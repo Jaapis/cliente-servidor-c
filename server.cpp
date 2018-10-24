@@ -1,6 +1,8 @@
 /*
 Servidor
-Autor: Rodrigo Toshiaki Horie - 26620
+
+Autores:        Rodrigo Toshiaki Horie  26620
+                Tiago Coli Resende      2016000103
 */
 
 #include <stdio.h>
